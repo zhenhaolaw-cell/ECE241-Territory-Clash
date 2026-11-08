@@ -1,0 +1,17 @@
+
+# Quartus temporary database
+db/
+incremental_db/
+
+# Quartus compilation output
+output_files/
+
+# Quartus temporary files
+*.rpt
+*.summary
+*.smsg
+*.flock
+
+# Editor temporary files
+*.bak
+*.tmp
