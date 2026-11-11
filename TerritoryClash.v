@@ -1,6 +1,7 @@
+
 module TerritoryClash (
-    input CLOCK_50,
-    input [3:0] KEY,
+    input CLOCK_50,           // 50 MHz clock
+    input [0:0] KEY,          // KEY[0]: active-low reset
 
     output [7:0] VGA_R,
     output [7:0] VGA_G,
@@ -12,46 +13,57 @@ module TerritoryClash (
     output VGA_CLK
 );
 
-    // Current pixel coordinates
-    reg [8:0] x;
-    reg [7:0] y;
+    // ==========================================
+    // Part 1: Drawing signals
+    // ==========================================
 
-    // Always draw blue pixels
-    wire [2:0] colour;
-    assign colour = 3'b001;
+    // VGA coordinates for 640x480 resolution
+    wire [9:0] draw_x;
+    wire [8:0] draw_y;
 
-    // Move to the next pixel every clock cycle
-    always @(posedge CLOCK_50 or negedge KEY[0])
-    begin
-        if (!KEY[0])
-        begin
-            x <= 9'd0;
-            y <= 8'd0;
-        end
-        else
-        begin
-            if (x == 9'd319)
-            begin
-                x <= 9'd0;
+    // RGB color: 3 bits per channel
+    wire [8:0] draw_color;
 
-                if (y == 8'd239)
-                    y <= 8'd0;
-                else
-                    y <= y + 1'b1;
-            end
-            else
-                x <= x + 1'b1;
-        end
-    end
+    // Enable writing a pixel to VGA memory
+    wire draw_write;
 
-    // Teacher-provided VGA Adapter
+    // Indicates that the grid is finished
+    wire draw_done;
+
+    // ==========================================
+    // Part 2: Grid Renderer
+    // ==========================================
+
+    // Our module generates the pixel coordinates
+    // needed to draw the 16x16 game grid.
+
+    grid_renderer grid (
+        .CLOCK_50(CLOCK_50),
+        .resetn(KEY[0]),
+
+        .x(draw_x),
+        .y(draw_y),
+        .color(draw_color),
+        .write(draw_write),
+        .done(draw_done)
+    );
+
+    // ==========================================
+    // Part 3: VGA Adapter
+    // ==========================================
+
+    // Instructor-provided VGA Adapter.
+    // Stores pixel colors in VGA frame memory
+    // and sends them to the monitor.
+
     vga_adapter VGA (
         .resetn(KEY[0]),
         .clock(CLOCK_50),
-        .color(colour),
-        .x(x),
-        .y(y),
-        .write(KEY[0]),
+
+        .color(draw_color),
+        .x(draw_x),
+        .y(draw_y),
+        .write(draw_write),
 
         .VGA_R(VGA_R),
         .VGA_G(VGA_G),
@@ -63,8 +75,19 @@ module TerritoryClash (
         .VGA_CLK(VGA_CLK)
     );
 
-    defparam VGA.RESOLUTION = "320x240";
-    defparam VGA.COLOR_DEPTH = 3;
-    defparam VGA.BACKGROUND_IMAGE = "UNUSED";
+    // ==========================================
+    // Part 4: VGA Configuration
+    // ==========================================
+
+    // Default resolution: 640x480
+    defparam VGA.RESOLUTION = "640x480";
+
+    // 9-bit RGB color
+    defparam VGA.COLOR_DEPTH = 9;
+
+    // Temporary background from instructor
+    defparam VGA.BACKGROUND_IMAGE =
+        "./MIF/territory_background_640_9.mif";
 
 endmodule
+
