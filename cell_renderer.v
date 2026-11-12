@@ -8,8 +8,8 @@ module cell_renderer (
     input [3:0] col,
     input [8:0] cell_color,
 
-    output [9:0] x,
-    output [8:0] y,
+    output [8:0] x,
+    output [7:0] y,
     output [8:0] color,
     output write,
 
@@ -17,12 +17,11 @@ module cell_renderer (
     output reg done
 );
 
-    // ==========================================
+    
     // Part 1: FSM States
-    // ==========================================
 
     // IDLE: Wait for a drawing request.
-    // DRAW: Write the 19x19 interior pixels.
+    // DRAW: Write the 9x9 interior pixels.
     // FINISH: Send a one-clock done pulse.
 
     localparam IDLE   = 2'd0;
@@ -31,9 +30,8 @@ module cell_renderer (
 
     reg [1:0] state;
 
-    // ==========================================
+
     // Part 2: Save the drawing request
-    // ==========================================
 
     // Store row, column, and color when
     // a new drawing request is received.
@@ -43,28 +41,26 @@ module cell_renderer (
     reg [3:0] saved_row;
     reg [3:0] saved_col;
     reg [8:0] saved_color;
-
+	 
     // Position inside the selected cell.
-    // Range: 1 to 19.
+    // Range: 1 to 9.
     // Offset 0 is reserved for grid lines.
 
-    reg [4:0] offset_x;
-    reg [4:0] offset_y;
+    reg [3:0] offset_x;
+    reg [3:0] offset_y;
 
-    // ==========================================
     // Part 3: Calculate VGA coordinates
-    // ==========================================
 
-    // Map starts at (160, 100).
-    // Each cell is 20x20 pixels.
+    // Map starts at (80, 40).
+    // Each cell is 10x10 pixels.
     // The first interior pixel is offset (1,1).
 
-    assign x = 10'd160
-             + (saved_col * 10'd20)
+    assign x = 9'd80
+             + (saved_col * 9'd10)
              + {5'd0, offset_x};
 
-    assign y = 9'd100
-             + (saved_row * 9'd20)
+    assign y = 8'd40
+             + (saved_row * 8'd10)
              + {4'd0, offset_y};
 
     // Use the color saved at start.
@@ -76,9 +72,8 @@ module cell_renderer (
     // Renderer is busy except during IDLE.
     assign busy = (state != IDLE);
 
-    // ==========================================
     // Part 4: FSM and pixel counters
-    // ==========================================
+
 
     always @(posedge CLOCK_50)
     begin
@@ -90,8 +85,8 @@ module cell_renderer (
             saved_col <= 4'd0;
             saved_color <= 9'd0;
 
-            offset_x <= 5'd1;
-            offset_y <= 5'd1;
+            offset_x <= 4'd1;
+            offset_y <= 4'd1;
 
             done <= 1'b0;
         end
@@ -104,9 +99,8 @@ module cell_renderer (
 
             case (state)
 
-                // --------------------------
+               
                 // State 1: IDLE
-                // --------------------------
 
                 IDLE:
                 begin
@@ -119,30 +113,30 @@ module cell_renderer (
 
                         // Start at the first
                         // interior pixel.
-                        offset_x <= 5'd1;
-                        offset_y <= 5'd1;
+                        offset_x <= 4'd1;
+                        offset_y <= 4'd1;
 
                         state <= DRAW;
                     end
                 end
 
-                // --------------------------
+
                 // State 2: DRAW
-                // --------------------------
+
 
                 DRAW:
                 begin
                     // One pixel is written
                     // during each clock cycle.
 
-                    if (offset_x == 5'd19)
+                    if (offset_x == 4'd9)
                     begin
                         // End of current row.
-                        offset_x <= 5'd1;
+                        offset_x <= 4'd1;
 
-                        if (offset_y == 5'd19)
+                        if (offset_y == 4'd9)
                         begin
-                            // All 19 rows finished.
+                            // All 9 rows finished.
                             state <= FINISH;
                         end
                         else
@@ -158,9 +152,9 @@ module cell_renderer (
                     end
                 end
 
-                // --------------------------
+              
                 // State 3: FINISH
-                // --------------------------
+                
 
                 FINISH:
                 begin

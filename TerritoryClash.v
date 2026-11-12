@@ -15,12 +15,12 @@ module TerritoryClash (
     output VGA_CLK
 );
 
-    // ==========================================
-    // Part 1: Grid Renderer
-    // ==========================================
 
-    wire [9:0] grid_x;
-    wire [8:0] grid_y;
+    // Part 1: Grid Renderer
+
+
+    wire [8:0] grid_x;
+    wire [7:0] grid_y;
     wire [8:0] grid_color;
     wire grid_write;
     wire grid_done;
@@ -36,9 +36,9 @@ module TerritoryClash (
         .done(grid_done)
     );
 
-    // ==========================================
+
     // Part 2: KEY[1] Press Detection
-    // ==========================================
+
 
     // KEY is active-low on DE1-SoC.
     // Synchronize KEY[1] to CLOCK_50.
@@ -70,9 +70,9 @@ module TerritoryClash (
     assign key_pressed =
         key_previous && !key_sync2;
 
-    // ==========================================
+  
     // Part 3: Cell Drawing Request
-    // ==========================================
+
 
     // These signals will later be driven
     // by PS/2 mouse logic instead of SW/KEY.
@@ -106,12 +106,12 @@ module TerritoryClash (
     assign cell_start =
         grid_done && !cell_busy && key_pressed;
 
-    // ==========================================
+ 
     // Part 4: Cell Renderer
-    // ==========================================
 
-    wire [9:0] cell_x;
-    wire [8:0] cell_y;
+
+    wire [8:0] cell_x;
+    wire [7:0] cell_y;
     wire [8:0] cell_color_out;
     wire cell_write;
 
@@ -133,9 +133,8 @@ module TerritoryClash (
         .done(cell_done)
     );
 
-    // ==========================================
+
     // Part 5: VGA Drawing Selection
-    // ==========================================
 
     // Both drawing modules share the
     // same VGA Adapter.
@@ -143,8 +142,8 @@ module TerritoryClash (
     // First: Draw the initial grid.
     // Then: Allow drawing selected cells.
 
-    reg [9:0] draw_x;
-    reg [8:0] draw_y;
+    reg [8:0] draw_x;
+    reg [7:0] draw_y;
     reg [8:0] draw_color;
     reg draw_write;
 
@@ -166,9 +165,9 @@ module TerritoryClash (
         end
     end
 
-    // ==========================================
+
     // Part 6: VGA Adapter
-    // ==========================================
+
 
     vga_adapter VGA (
         .resetn(KEY[0]),
@@ -189,14 +188,13 @@ module TerritoryClash (
         .VGA_CLK(VGA_CLK)
     );
 
-    // ==========================================
-    // Part 7: VGA Configuration
-    // ==========================================
 
-    defparam VGA.RESOLUTION = "640x480";
+    // Part 7: VGA Configuration
+
+    defparam VGA.RESOLUTION = "320x240";
     defparam VGA.COLOR_DEPTH = 9;
 
     defparam VGA.BACKGROUND_IMAGE =
-        "./MIF/territory_background_640_9.mif";
+        "./MIF/territory_background_320_9.mif";
 
 endmodule
