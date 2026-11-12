@@ -37,7 +37,7 @@ module grid_renderer (
     // plus the final border.
 
     assign x = 10'd160 + {1'b0, local_x};
-    assign y = 9'd100 + local_y;
+    assign y = 9'd80 + local_y;
 
     // White grid lines
     assign color = 9'b111_111_111;
