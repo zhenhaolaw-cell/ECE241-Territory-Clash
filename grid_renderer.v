@@ -10,8 +10,8 @@ module grid_renderer (
     output reg done
 );
 
-    // Current position inside the entire map.
-    // Range: 0 to 160, including the outer border.
+    // Current position inside the entire map
+    // Range: 0 to 160, including the outer border
     reg [7:0] local_x;
     reg [7:0] local_y;
 
