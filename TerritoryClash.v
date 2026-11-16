@@ -1,9 +1,11 @@
 
-
 module TerritoryClash (
     input CLOCK_50,
     input [3:0] KEY,
     input [9:0] SW,
+
+    inout PS2_CLK,
+    inout PS2_DAT,
 
     output [7:0] VGA_R,
     output [7:0] VGA_G,
@@ -15,9 +17,7 @@ module TerritoryClash (
     output VGA_CLK
 );
 
-
     // Part 1: Grid Renderer
-
 
     wire [8:0] grid_x;
     wire [7:0] grid_y;
@@ -25,6 +25,7 @@ module TerritoryClash (
     wire grid_write;
     wire grid_done;
 
+    // Draw the initial 16x16 grid.
     grid_renderer grid (
         .CLOCK_50(CLOCK_50),
         .resetn(KEY[0]),
@@ -37,45 +38,65 @@ module TerritoryClash (
     );
 
 
-    // Part 2: KEY[1] Press Detection
+    // Part 2: PS/2 Mouse Controller
+
+    // The instructor's PS2_Controller receives
+    // bytes from the physical PS/2 mouse.
+
+    wire [7:0] mouse_data;
+    wire mouse_data_valid;
+
+    PS2_Controller #(
+        .INITIALIZE_MOUSE(1)
+    ) mouse_ps2 (
+        .CLOCK_50(CLOCK_50),
+        .reset(~KEY[0]),
+
+        .the_command(8'h00),
+        .send_command(1'b0),
+
+        .PS2_CLK(PS2_CLK),
+        .PS2_DAT(PS2_DAT),
+
+        .received_data(mouse_data),
+        .received_data_en(mouse_data_valid),
+
+        .command_was_sent(),
+        .error_communication_timed_out()
+    );
 
 
-    // KEY is active-low on DE1-SoC.
-    // Synchronize KEY[1] to CLOCK_50.
+    // Part 3: Mouse Position and Click Detection
 
-    reg key_sync1;
-    reg key_sync2;
-    reg key_previous;
+    // Convert mouse movement packets into
+    // a selected row and column.
+    //
+    // mouse_click becomes high for one clock
+    // when the left mouse button is pressed.
 
-    always @(posedge CLOCK_50)
-    begin
-        if (!KEY[0])
-        begin
-            key_sync1 <= 1'b1;
-            key_sync2 <= 1'b1;
-            key_previous <= 1'b1;
-        end
-        else
-        begin
-            key_sync1 <= KEY[1];
-            key_sync2 <= key_sync1;
-            key_previous <= key_sync2;
-        end
-    end
+    wire [3:0] mouse_row;
+    wire [3:0] mouse_col;
+    wire mouse_click;
+    wire mouse_packet_ready;
 
-    // Detect one falling edge.
-    // This makes a one-clock start pulse.
-    wire key_pressed;
+    mouse_cursor mouse_unit (
+        .CLOCK_50(CLOCK_50),
+        .resetn(KEY[0]),
 
-    assign key_pressed =
-        key_previous && !key_sync2;
+        .received_data(mouse_data),
+        .received_data_en(mouse_data_valid),
 
-  
-    // Part 3: Cell Drawing Request
+        .cur_row(mouse_row),
+        .cur_col(mouse_col),
+        .click(mouse_click),
+        .packet_ready(mouse_packet_ready)
+    );
 
 
-    // These signals will later be driven
-    // by PS/2 mouse logic instead of SW/KEY.
+    // Part 4: Cell Drawing Request
+
+    // The mouse now selects row and column.
+    // SW[8] still selects the drawing color.
 
     wire [3:0] requested_row;
     wire [3:0] requested_col;
@@ -85,10 +106,10 @@ module TerritoryClash (
     wire cell_busy;
     wire cell_done;
 
-    assign requested_row = SW[7:4];
-    assign requested_col = SW[3:0];
+    assign requested_row = mouse_row;
+    assign requested_col = mouse_col;
 
-    // Choose blue or red using SW[8].
+    // Select blue or red.
     reg [8:0] selected_color;
 
     always @(*)
@@ -101,14 +122,16 @@ module TerritoryClash (
 
     assign requested_color = selected_color;
 
-    // Do not accept a new command while
-    // the grid or cell is being drawn.
+    // Accept mouse clicks only when the grid
+    // is finished and the cell is not busy.
     assign cell_start =
-        grid_done && !cell_busy && key_pressed;
+        grid_done && !cell_busy && mouse_click;
 
- 
-    // Part 4: Cell Renderer
 
+    // Part 5: Cell Renderer
+
+    // Draw the interior of the selected cell.
+    // The 10x10 cell keeps its white grid lines.
 
     wire [8:0] cell_x;
     wire [7:0] cell_y;
@@ -134,13 +157,10 @@ module TerritoryClash (
     );
 
 
-    // Part 5: VGA Drawing Selection
+    // Part 6: VGA Drawing Selection
 
-    // Both drawing modules share the
-    // same VGA Adapter.
-    //
-    // First: Draw the initial grid.
-    // Then: Allow drawing selected cells.
+    // Draw the grid first.
+    // After grid_done, allow cell updates.
 
     reg [8:0] draw_x;
     reg [7:0] draw_y;
@@ -166,8 +186,10 @@ module TerritoryClash (
     end
 
 
-    // Part 6: VGA Adapter
+    // Part 7: VGA Adapter
 
+    // The VGA Adapter writes pixels into
+    // video memory and drives the monitor.
 
     vga_adapter VGA (
         .resetn(KEY[0]),
@@ -189,11 +211,15 @@ module TerritoryClash (
     );
 
 
-    // Part 7: VGA Configuration
+    // Part 8: VGA Configuration
 
+    // Use 320x240 logical resolution.
     defparam VGA.RESOLUTION = "320x240";
+
+    // Use 9-bit RGB color.
     defparam VGA.COLOR_DEPTH = 9;
 
+    // Load the TerritoryClash background.
     defparam VGA.BACKGROUND_IMAGE =
         "./MIF/territory_background_320_9.mif";
 

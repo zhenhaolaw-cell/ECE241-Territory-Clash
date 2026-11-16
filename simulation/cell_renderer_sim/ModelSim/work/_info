@@ -1,0 +1,50 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/AlEX/Desktop/ECE241-Territory-Clash/simulation/cell_renderer_sim/ModelSim
+vcell_renderer
+Z1 !s110 1794799595
+!i10b 1
+!s100 cfj`ESA8L@@:fa5U0og>P2
+I8SE]YBh_5DMc4:;`Q_U5I0
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1794797789
+8../cell_renderer.v
+F../cell_renderer.v
+L0 2
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1794799595.000000
+!s107 ../cell_renderer.v|
+!s90 -reportprogress|300|../cell_renderer.v|
+!i113 1
+Z5 tCvgOpt 0
+vtestbench
+R1
+!i10b 1
+!s100 3z`9Xl`N1aT0aRHG3[;]?0
+IZ5=gicPjHLNQF<:Edi<E42
+R2
+R0
+w1794816958
+8testbench.v
+Ftestbench.v
+L0 3
+R3
+r1
+!s85 0
+31
+R4
+!s107 testbench.v|
+!s90 -reportprogress|300|testbench.v|
+!i113 1
+R5

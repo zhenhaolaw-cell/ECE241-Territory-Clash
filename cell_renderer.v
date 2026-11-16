@@ -24,9 +24,9 @@ module cell_renderer (
     // DRAW: Write the 9x9 interior pixels.
     // FINISH: Send a one-clock done pulse.
 
-    localparam IDLE   = 2'd0;
-    localparam DRAW   = 2'd1;
-    localparam FINISH = 2'd2;
+    parameter IDLE   = 2'd0;
+    parameter DRAW   = 2'd1;
+    parameter FINISH = 2'd2;
 
     reg [1:0] state;
 
