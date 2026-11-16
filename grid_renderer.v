@@ -33,9 +33,7 @@ module grid_renderer (
 
     // Draw only the vertical and horizontal grid lines.
     // Offset 0 represents the beginning of each cell.
-    assign write = drawing &&
-                   ((in_cell_x == 4'd0) ||
-                    (in_cell_y == 4'd0));
+    assign write = drawing && ((in_cell_x == 4'd0) || (in_cell_y == 4'd0));
 
     always @(posedge CLOCK_50)
     begin
