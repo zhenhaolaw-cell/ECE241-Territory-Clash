@@ -104,6 +104,7 @@ module TerritoryClash (
     wire cell_start;
     wire cell_busy;
     wire cell_done;
+    wire hl_busy;
 
     assign requested_row = mouse_row;
     assign requested_col = mouse_col;
@@ -124,10 +125,10 @@ module TerritoryClash (
     // Accept mouse clicks only when the grid
     // is finished and the cell is not busy.
     assign cell_start =
-        grid_done && !cell_busy && mouse_click;
+        grid_done && !cell_busy && mouse_click && !hl_busy;
 
 
-    // Part 5: Cell Renderer
+    // Part 5a: Cell Renderer
 
     // Draw the interior of the selected cell.
     // The 10x10 cell keeps its white grid lines.
@@ -155,6 +156,23 @@ module TerritoryClash (
         .done(cell_done)
     );
 
+    // Part 5b: Cell Highlight Renderer
+    wire [8:0] hl_x;
+    wire [7:0] hl_y;
+    wire [8:0] hl_color;
+    wire hl_write;
+
+    highlight_renderer hl_unit (
+        .CLOCK_50(CLOCK_50),
+        .resetn(KEY[0]),
+        .enable(grid_done && !mouse_click),
+        .cell_busy(cell_busy),
+        .cur_row(mouse_row), 
+        .cur_col(mouse_col),
+        .x(hl_x), .y(hl_y), .color(hl_color),
+        .write(hl_write), .busy(hl_busy)
+    );
+
 
     // Part 6: VGA Drawing Selection
 
@@ -174,6 +192,13 @@ module TerritoryClash (
             draw_y = grid_y;
             draw_color = grid_color;
             draw_write = grid_write;
+        end
+        else if (hl_busy)
+        begin
+            draw_x = hl_x;
+            draw_y = hl_y;
+            draw_color = hl_color;
+            draw_write = hl_write;
         end
         else
         begin
