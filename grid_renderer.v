@@ -1,4 +1,3 @@
-
 module grid_renderer (
     input CLOCK_50,
     input resetn,
