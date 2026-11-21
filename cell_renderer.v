@@ -1,4 +1,3 @@
-
 module cell_renderer (
     input CLOCK_50,
     input resetn,
@@ -33,10 +32,8 @@ module cell_renderer (
 
     // Part 2: Save the drawing request
 
-    // Store row, column, and color when
-    // a new drawing request is received.
-    // This prevents input changes from
-    // affecting a drawing in progress.
+    // Store row,column,color when a new drawing request is received.
+    // Prevents input changes from affecting a drawing in progress.
 
     reg [3:0] saved_row;
     reg [3:0] saved_col;
@@ -55,13 +52,9 @@ module cell_renderer (
     // Each cell is 10x10 pixels.
     // The first interior pixel is offset (1,1).
 
-    assign x = 9'd80
-             + (saved_col * 9'd10)
-             + {5'd0, offset_x};
+    assign x = 9'd80 + (saved_col * 9'd10) + {5'd0, offset_x};
 
-    assign y = 8'd40
-             + (saved_row * 8'd10)
-             + {4'd0, offset_y};
+    assign y = 8'd40 + (saved_row * 8'd10) + {4'd0, offset_y};
 
     // Use the color saved at start.
     assign color = saved_color;
@@ -93,8 +86,7 @@ module cell_renderer (
         else
         begin
             // Default: done is low.
-            // It becomes high for one clock
-            // when a drawing finishes.
+            // It becomes high for one clock when a drawing finishes.
             done <= 1'b0;
 
             case (state)

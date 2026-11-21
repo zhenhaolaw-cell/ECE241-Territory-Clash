@@ -1,4 +1,3 @@
-
 module character_stats (
     input [3:0] character_id,
 
