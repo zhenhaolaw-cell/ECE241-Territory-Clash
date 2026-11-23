@@ -39,8 +39,7 @@ module TerritoryClash (
 
     // Part 2: PS/2 Mouse Controller
 
-    // The instructor's PS2_Controller receives
-    // bytes from the physical PS/2 mouse.
+    // The PS2_Controller receive bytes from the physical PS/2 mouse.
 
     wire [7:0] mouse_data;
     wire mouse_data_valid;
@@ -67,11 +66,8 @@ module TerritoryClash (
 
     // Part 3: Mouse Position and Click Detection
 
-    // Convert mouse movement packets into
-    // a selected row and column.
-    //
-    // mouse_click becomes high for one clock
-    // when the left mouse button is pressed.
+    // Convert mouse movement packets into a selected row and column.
+    // mouse_click becomes high when the left mouse button is pressed.
 
     wire [3:0] mouse_row;
     wire [3:0] mouse_col;
@@ -122,8 +118,7 @@ module TerritoryClash (
 
     assign requested_color = selected_color;
 
-    // Accept mouse clicks only when the grid
-    // is finished and the cell is not busy.
+    // Accept only when the grid is finished and the cell is not busy.
     assign cell_start =
         grid_done && !cell_busy && mouse_click && !hl_busy;
 
@@ -212,8 +207,7 @@ module TerritoryClash (
 
     // Part 7: VGA Adapter
 
-    // The VGA Adapter writes pixels into
-    // video memory and drives the monitor.
+    // VGA Adapter writes pixels into video memory
 
     vga_adapter VGA (
         .resetn(KEY[0]),
