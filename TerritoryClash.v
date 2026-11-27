@@ -14,7 +14,7 @@
 module TerritoryClash (
     input CLOCK_50,
     input [3:0] KEY,
-    input [9:0] SW,           // M2 CHANGE: SW[3:0] = character ID (SW[8] no longer used)
+    input [9:0] SW, // ** character ID (SW[8] no longer used)
 
     inout PS2_CLK,
     inout PS2_DAT,
@@ -28,11 +28,10 @@ module TerritoryClash (
     output VGA_SYNC_N,
     output VGA_CLK,
 
-    output [9:0] LEDR         // M2 CHANGE: new port, LEDR[3:0] = game state, LEDR[9] = placement finished
+    output [9:0] LEDR         // ** new port, 3:0 = game state, 9 = placement finished
 );
 
-    // M2 CHANGE: shared constants (EMPTY/BLUE/RED, game states, colours)
-    `include "game_defs.vh"
+    // EMPTY/BLUE/RED, game states, colours are shared constants
 
     // Part 1: Grid Renderer
 
@@ -107,7 +106,6 @@ module TerritoryClash (
 
 
     // Part 4: Character Selection and Placement
-    // M2 CHANGE: this whole part is new. It replaces the old
     // "Cell Drawing Request" (SW[8] colour, cell_start = mouse_click).
 
     // KEY[1] edge detector: one-clock confirm pulse (KEY is active-low)
@@ -330,8 +328,6 @@ module TerritoryClash (
 
 
     // Part 5a: Cell Renderer
-    // M2 CHANGE: requested_row/col/color and cell_start now come from
-    // display_controller (Part 4) instead of directly from the mouse.
 
     // Draw the interior of the selected cell.
     // The 10x10 cell keeps its white grid lines.
@@ -368,7 +364,7 @@ module TerritoryClash (
     highlight_renderer hl_unit (
         .CLOCK_50(CLOCK_50),
         .resetn(KEY[0]),
-        .enable(grid_done && !refresh_busy),   // M2 CHANGE: was !mouse_click; pause while redrawing
+        .enable(grid_done && !refresh_busy),   // !mouse_click; pause while redrawing
         .cell_busy(cell_busy),
         .cur_row(mouse_row), 
         .cur_col(mouse_col),
@@ -396,7 +392,7 @@ module TerritoryClash (
             draw_color = grid_color;
             draw_write = grid_write;
         end
-        else if (drawing_ui)              // M2 CHANGE: new input, text from ui_renderer
+        else if (drawing_ui) //new input, text from ui_renderer
         begin
             draw_x = ui_x;
             draw_y = ui_y;
