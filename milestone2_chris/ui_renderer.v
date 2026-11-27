@@ -61,7 +61,7 @@ module ui_renderer #(
                 line0 = {"RED PLACE ", 4'h3, 1'b0, red_placed_count, "/5   "};
             end
             BATTLE: begin
-                line0 = {"TURN ", 4'h3, turn_h, 4'h3, turn_t, 4'h3, turn_o, "        "};                                  // 5+3+8 = 16
+                line0 = {"TURN ", 4'h3, turn_h, 4'h3, turn_t, 4'h3, turn_o, "        "}; // 5+3+8 = 16
             end
             GAME_OVER: begin
                 if (winner == WIN_BLUE)      line0 = "BLUE WINS       ";
