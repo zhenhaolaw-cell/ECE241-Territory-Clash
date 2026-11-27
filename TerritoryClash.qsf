@@ -907,8 +907,5 @@ set_global_assignment -name VERILOG_FILE milestone2_chris/character_selection.v
 set_global_assignment -name VERILOG_FILE milestone2_chris/placement_controller.v
 set_global_assignment -name VERILOG_FILE milestone2_chris/map_access_controller.v
 set_global_assignment -name VERILOG_FILE milestone2_chris/font_rom.v
-set_global_assignment -name VERILOG_FILE milestone2_chris/round_timer.v
 set_global_assignment -name VERILOG_FILE milestone2_chris/ui_renderer.v
 set_global_assignment -name VERILOG_FILE milestone2_chris/display_controller.v
-set_global_assignment -name VERILOG_FILE milestone2_lex/hex_count_display.v
-set_global_assignment -name VERILOG_FILE game_fsm.v
