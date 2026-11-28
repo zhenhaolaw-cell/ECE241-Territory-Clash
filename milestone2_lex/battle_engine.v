@@ -1,4 +1,3 @@
-
 module battle_engine (
     input CLOCK_50,
     input resetn,

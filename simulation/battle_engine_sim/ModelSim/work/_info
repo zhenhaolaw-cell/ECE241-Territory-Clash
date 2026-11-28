@@ -1,0 +1,52 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/AlEX/Desktop/ECE241-Territory-Clash/simulation/battle_engine_sim/ModelSim
+vbattle_engine
+Z1 !s110 1795661621
+!i10b 1
+!s100 =48DE8JEPNz3>:3B:i@_=2
+Iem^^P72]RJ1JO7_?W7Rgj3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1795679428
+8../battle_engine.v
+F../battle_engine.v
+F../game_defs.vh
+L0 2
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z5 !s108 1795661621.000000
+!s107 ../game_defs.vh|../battle_engine.v|
+!s90 -reportprogress|300|+incdir+..|../battle_engine.v|
+!i113 1
+!s92 +incdir+..
+Z6 tCvgOpt 0
+vtestbench
+R1
+!i10b 1
+!s100 R11iLM9laFB9kbo4`6PJc3
+ICh3ezljT`Gm[Xd?iUD>a90
+R2
+R0
+R3
+8testbench.v
+Ftestbench.v
+L0 3
+R4
+r1
+!s85 0
+31
+R5
+!s107 testbench.v|
+!s90 -reportprogress|300|testbench.v|
+!i113 1
+R6

@@ -1,0 +1,72 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/AlEX/Desktop/ECE241-Territory-Clash/simulation/expansion_engine_sim/ModelSim
+vexpansion_engine
+Z1 !s110 1795656162
+!i10b 1
+!s100 mJ=a?>9YQR<X:;m;KmL_[2
+I=TK9gaE0:iE2II?@W1Wb23
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1795564000
+8../expansion_engine.v
+F../expansion_engine.v
+F../game_defs.vh
+L0 1
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1795656162.000000
+!s107 ../game_defs.vh|../expansion_engine.v|
+!s90 -reportprogress|300|+incdir+..|../expansion_engine.v|
+!i113 1
+!s92 +incdir+..
+Z5 tCvgOpt 0
+vlfsr
+R1
+!i10b 1
+!s100 :3jb7iY]cmPPZG`3T?@=22
+I?:eXQhgX5M>d=:n<20[zj1
+R2
+R0
+w1795488304
+8../lfsr.v
+F../lfsr.v
+L0 1
+R3
+r1
+!s85 0
+31
+R4
+!s107 ../lfsr.v|
+!s90 -reportprogress|300|../lfsr.v|
+!i113 1
+R5
+vtestbench
+R1
+!i10b 1
+!s100 =9eIZ2TYgUYJ1Lf>US@MG3
+IEnHhY<ARe>akoVZXW06f^3
+R2
+R0
+w1795672182
+8testbench.v
+Ftestbench.v
+L0 3
+R3
+r1
+!s85 0
+31
+R4
+!s107 testbench.v|
+!s90 -reportprogress|300|testbench.v|
+!i113 1
+R5

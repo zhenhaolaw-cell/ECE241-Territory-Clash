@@ -1,0 +1,50 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/AlEX/Desktop/ECE241-Territory-Clash/simulation/lfsr_sim/ModelSim
+vlfsr
+Z1 !s110 1795576319
+!i10b 1
+!s100 :3jb7iY]cmPPZG`3T?@=22
+I?:eXQhgX5M>d=:n<20[zj1
+Z2 VDg1SIo80bB@j0V0VzS_@n1
+R0
+Z3 w1795594050
+8../lfsr.v
+F../lfsr.v
+L0 1
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z5 !s108 1795576319.000000
+!s107 ../lfsr.v|
+!s90 -reportprogress|300|../lfsr.v|
+!i113 1
+Z6 tCvgOpt 0
+vtestbench
+R1
+!i10b 1
+!s100 gkoazZ;B8eK9GBWQE3ENd0
+IFLAa::;i7PlcdiB`[7bjd2
+R2
+R0
+R3
+8testbench.v
+Ftestbench.v
+L0 3
+R4
+r1
+!s85 0
+31
+R5
+!s107 testbench.v|
+!s90 -reportprogress|300|testbench.v|
+!i113 1
+R6
